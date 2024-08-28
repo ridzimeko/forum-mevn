@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import asyncHandler from "../middleware/asyncHandler.js";
 
 const signToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -23,22 +24,15 @@ const createSendToken = (user, statusCode, res) => {
 	});
 };
 
-export const RegisterUser = async (req, res) => {
-	try {
-		const createUser = await User.create({
-			name: req.body.name,
-			email: req.body.email,
-			password: req.body.password,
-		});
+export const RegisterUser = asyncHandler(async (req, res) => {
+	const createUser = await User.create({
+		name: req.body.name,
+		email: req.body.email,
+		password: req.body.password,
+	});
 
-		createSendToken(createUser, 201, res);
-	} catch (error) {
-		return res.status(400).json({
-			message: "Error",
-			error: error.message,
-		});
-	}
-};
+	createSendToken(createUser, 201, res);
+});
 
 export const LoginUser = (req, res) => {
 	res.send("Login berhasil");

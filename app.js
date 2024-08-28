@@ -5,6 +5,7 @@ import authRouter from "./router/authRouter.js";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import { errorHandler, notFound } from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -22,6 +23,9 @@ if (process.env.NODE_ENV === "development") {
 
 // Parent router
 app.use("/api/v1/auth", authRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.get("/", (req, res) => {
 	res.status(200).json({
