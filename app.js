@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRouter from "./router/authRouter.js";
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -11,8 +13,12 @@ const port = 3000;
 
 // Middleware
 app.use(cors());
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+if (process.env.NODE_ENV === "development") {
+	app.use(morgan("dev"));
+}
 
 // Parent router
 app.use("/api/v1/auth", authRouter);
@@ -28,6 +34,9 @@ app.listen(port, () => {
 });
 
 // Database
-mongoose.connect(process.env.MONGODB_URL).then(() => console.log('Database connected')).catch((err) => {
-	throw new Error(err.message);
-});
+mongoose
+	.connect(process.env.MONGODB_URL)
+	.then(() => console.log("Database connected"))
+	.catch((err) => {
+		console.error(error.message);
+	});
