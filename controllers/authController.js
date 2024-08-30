@@ -25,10 +25,13 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 export const RegisterUser = asyncHandler(async (req, res) => {
+	const isFirstAccount = (await User.countDocuments()) === 0;
+	const role = isFirstAccount ? "admin" : "user";
 	const createUser = await User.create({
 		name: req.body.name,
 		email: req.body.email,
 		password: req.body.password,
+		role,
 	});
 
 	createSendToken(createUser, 201, res);
@@ -55,9 +58,26 @@ export const LoginUser = asyncHandler(async (req, res) => {
 });
 
 export const LogoutUser = (req, res) => {
-	res.send("Logout berhasil");
+	res.cookie("jwt", "", {
+		expire: new Date(0),
+		httpOnly: true,
+		security: false,
+	});
+
+	res.status(200).json({
+		message: "Logout berhasil",
+	});
 };
 
-export const GetUser = (req, res) => {
-	res.send("Get User berhasil");
+export const GetUser = async (req, res) => {
+	const user = await User.findById(req.user.id).select({ password: 0 });
+
+	if (user)
+		return res.status(200).json({
+			data: user,
+		});
+
+	return res.status(400).json({
+		message: "User tidak ditemukan",
+	});
 };
