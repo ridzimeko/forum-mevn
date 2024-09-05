@@ -1,10 +1,13 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
-const app = createApp(App)
+// General Font
+import 'vfonts/Lato.css'
+// Monospace Font
+import 'vfonts/FiraCode.css'
+
+const app = createApp(App);
 
 app.use(router)
 

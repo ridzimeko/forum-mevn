@@ -1,27 +1,18 @@
 <script setup>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import DialogForm from './components/DialogForm.vue'
+import Header from './layouts/Header.vue'
+import { darkTheme } from 'naive-ui'
 
-const dataMessage = ref();
+import { ref } from 'vue'
 
-onMounted(() => {
-	getMessage();
-});
-
-async function getMessage() {
-	try {
-		const { data } = await axios.get("http://localhost:3000");
-		dataMessage.value = data;
-		console.log(dataMessage.value);
-	} catch (error) {
-		console.error(error);
-	}
-}
+const showDialog = ref(false)
 </script>
 
 <template>
-  <p>{{ dataMessage?.message }}</p>
-  <h1>Aokwaokwow</h1>
-  <p>wkwkwkkw</p>
+  <n-config-provider :theme="darkTheme" :theme-overrides="{ common: { fontWeightStrong: '600' } }">
+    <n-layout>
+      <Header @dialog-handler="showDialog = !showDialog" />
+      <DialogForm v-model:show="showDialog" />
+    </n-layout>
+  </n-config-provider>
 </template>
-
