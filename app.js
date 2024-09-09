@@ -18,8 +18,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 if (process.env.NODE_ENV === "development") {
-	app.use(morgan("dev"));
+  app.use(morgan("dev"));
 }
+
+app.get("/api/v1/test", (req, res) => {
+  res.status(200).json({
+    message: "Ini adalah pesan",
+  });
+});
 
 // Parent router
 app.use("/api/v1/auth", authRouter);
@@ -27,20 +33,14 @@ app.use("/api/v1/auth", authRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-app.get("/", (req, res) => {
-	res.status(200).json({
-		message: "Ini adalah pesan",
-	});
-});
-
 app.listen(port, () => {
-	console.log(`Example app listening on port ${port}`);
+  console.log(`Example app listening on port ${port}`);
 });
 
 // Database
 mongoose
-	.connect(process.env.MONGODB_URL)
-	.then(() => console.log("Database connected"))
-	.catch((err) => {
-		console.error(error.message);
-	});
+  .connect(process.env.MONGODB_URL)
+  .then(() => console.log("Database connected"))
+  .catch((err) => {
+    console.error(error.message);
+  });

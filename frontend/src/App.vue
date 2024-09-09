@@ -1,27 +1,17 @@
 <script setup>
-import DialogForm from './components/DialogForm.vue'
+import AuthForm from './components/AuthForm.vue'
 import Header from './layouts/Header.vue'
 import { darkTheme } from 'naive-ui'
-import customFetch from './api'
-import { onMounted, ref } from 'vue'
+import { useAuthStore } from './stores/authStores'
 
-const showDialog = ref(false)
-
-const getData = async () => {
-  const res = await customFetch.get('/test')
-  console.log(res)
-}
-
-onMounted(() => {
-  getData()
-})
+const store = useAuthStore()
 </script>
 
 <template>
   <n-config-provider :theme="darkTheme" :theme-overrides="{ common: { fontWeightStrong: '600' } }">
     <n-layout>
-      <Header @dialog-handler="showDialog = !showDialog" />
-      <DialogForm v-model:show="showDialog" />
+      <Header @dialog-handler="store.dialog = !store.dialog" />
+      <AuthForm v-model:show="store.dialog" />
     </n-layout>
   </n-config-provider>
 </template>

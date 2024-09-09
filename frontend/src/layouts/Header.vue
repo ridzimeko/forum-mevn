@@ -11,10 +11,7 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            name: 'home',
-            params: {
-              lang: 'en-US'
-            }
+            name: 'home'
           }
         },
         { default: () => 'Home' }
@@ -26,7 +23,7 @@ const menuOptions = [
 
 <template>
   <n-layout-header style="padding: 16px; display: flex">
-    <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
+    <n-menu mode="horizontal" :options="menuOptions" />
     <n-button @click="$emit('dialogHandler')" type="primary">
       <template #icon>
         <n-icon>
