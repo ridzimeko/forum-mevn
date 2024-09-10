@@ -33,7 +33,12 @@ const handleRegisterSubmit = () => {
 <template>
   <n-modal transform-origin="center" :block-scroll="true">
     <n-card style="width: 520px">
-      <n-alert type="error" v-show="authStores.errorAlert" closable>
+      <n-alert
+        type="error"
+        v-show="authStores.errorAlert"
+        closable
+        @close="authStores.errorAlert = false"
+      >
         {{ authStores.errorMsg }}
       </n-alert>
       <n-tabs
