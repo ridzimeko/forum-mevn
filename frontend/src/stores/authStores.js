@@ -43,5 +43,25 @@ export const useAuthStore = defineStore('user', () => {
     }
   }
 
-  return { dialog, LoginUser, errorAlert, errorMsg, currentUser, LogoutUser }
+  const RegisterUser = async (inputData) => {
+    try {
+      const { data } = await customFetch.post('/auth/register', {
+        name: inputData.name,
+        email: inputData.email,
+        password: inputData.password
+      })
+      currentUser.value = data.data
+      localStorage.setItem('user', JSON.stringify(data.data))
+
+      dialog.value = false
+      errorAlert.value = false
+
+      router.push({ name: 'dashboard' })
+    } catch (error) {
+      errorAlert.value = true
+      errorMsg.value = error.response.data.message
+    }
+  }
+
+  return { dialog, LoginUser, errorAlert, errorMsg, currentUser, LogoutUser, RegisterUser }
 })
